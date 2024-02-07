@@ -1,8 +1,5 @@
-const myLibrary = [{
-    title: "Dance with dragons",
-    author: "George R R Martin",
-    pages: "Loads",
-    read: "Yes"}];
+const myLibrary = [];
+
 
 function Book(title, author, pages, read) {
     this.title = title;
@@ -14,8 +11,26 @@ function Book(title, author, pages, read) {
     };
 }
 
+//create library card
+function createLibraryCard(currentBook) {
+  let library = document.querySelector('.header');
+  const book = document.createElement('div');
+  book.innerHTML = `Book ${currentBook + 1}: <br />
+  Title: ${myLibrary[currentBook].title} <br />
+  Author: ${myLibrary[currentBook].author} <br />
+  # Pages: ${myLibrary[currentBook].pages} <br />
+  Have I read this book? ${myLibrary[currentBook].read} <br />
+  `
+  book.classList.add(`book${myLibrary.length - 1}`);
+  library.append(book);
+  return ;
+
+}
+
 // your JavaScript file
 const container = document.querySelector('.card');
+
+
 
 function createForm() {
 const cardContainer = document.createElement('form');
@@ -61,8 +76,6 @@ readValueTwo.innerHTML = "No";
 readButton.appendChild(readValueOne);
 readButton.appendChild(readValueTwo);
 
-
-
 const submit = document.createElement('button');
 submit.type = 'submit'
 submit.innerText = 'SUBMIT'
@@ -70,26 +83,44 @@ cardContainer.appendChild(labelRead);
 cardContainer.appendChild(readButton);
 cardContainer.appendChild(submit);
 
-submit.addEventListener('click', function() {
-    cardContainer.remove;
+//submit book and send to library
+submit.addEventListener('click', function(event) {
+  event.preventDefault();
+  let title = document.querySelector('.title').value;
+  let pages = document.querySelector('.author').value;
+  let author = document.querySelector('.pages').value;
+  let read = document.querySelector('#readButton').value;
+  addBookToLibrary(title,pages,author,read);
+  cardContainer.remove();
+  createLibraryCard(myLibrary.length - 1);
+  
+  // Add delete button
+  if (myLibrary.length > 0) {
+    let latestBook = document.querySelector(`.book${myLibrary.length - 1}`)
+    let addButton = document.querySelector('#add-book')
+    let body = document.body;
+    let deleteButton = document.createElement('button');
+    deleteButton.innerHTML = 'Delete Last Book'
+    body.appendChild(deleteButton);
+    deleteButton.addEventListener('click',() => {
+      myLibrary.pop();
+      latestBook.remove();
+      if (myLibrary.length === 0) {
+        deleteButton.remove();
+      }
+    })
+  }
 })
 
 }
 
 //select the button & have form pop up
 document.getElementById('add-book').addEventListener('click', function() {
-    console.log('hello')
     createForm()
 })
 
 
-function addBookToLibrary() {
-    myLibrary.push(this.Book)
+function addBookToLibrary(title,pages,author,read){
+  const newBook = new Book(title,pages,author,read);
+  myLibrary.push(newBook);
   }
-
-const theHobbit = new Book("The Hobbit", "J.R.R. Tolkien", "295 pages", "not yet read")
-myLibrary.push(theHobbit)
-
-console.log(theHobbit.info())
-
-console.log(theHobbit.__proto__)
